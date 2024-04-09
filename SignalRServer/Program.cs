@@ -31,4 +31,6 @@ app.MapControllerRoute(
 
 app.MapHub<LearningHub>("/learningHub");
 
+app.UseBlazorFrameworkFiles();
+
 app.Run();
