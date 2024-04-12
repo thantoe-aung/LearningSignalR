@@ -4,8 +4,9 @@
 // Write your JavaScript code.
 
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/learningHub")
-    .configureLogging(signalR.LogLevel.Information)
+var connection = new signalR.HubConnectionBuilder().withUrl("/learningHub", {
+   
+}) .configureLogging(signalR.LogLevel.Information)
     .build();
 
  connection.start();
