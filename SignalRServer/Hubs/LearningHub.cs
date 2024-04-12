@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Runtime.CompilerServices;
 
 namespace SignalRServer.Hubs
 {
@@ -43,6 +44,27 @@ namespace SignalRServer.Hubs
         private string GetMessageToSend(string originalMessage)
         {
             return $"User Connection Id : {Context.ConnectionId}. Message : {originalMessage}";
+        }
+
+
+        public async Task BroadCastStream(IAsyncEnumerable<string> stream)
+        {
+            await foreach (var message in stream)
+            {
+                await Clients.Caller.ReceiveMessage($"Server Received {message}");
+            }
+        }
+
+
+        //Server Streaming
+        public async IAsyncEnumerable<string> TriggerStream(int jobCount, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            for(int i=0; i < jobCount; i++)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                yield return $"Job {i} executed successfully";
+                await Task.Delay(1000, cancellationToken);
+            }
         }
 
         public override async Task OnConnectedAsync()
